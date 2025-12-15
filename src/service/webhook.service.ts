@@ -38,20 +38,33 @@ export class WebhookService {
     }
 
     public async handleReceiveMessage(data: WebhookMessageDto):Promise<boolean>{
-        const message = data.entry[0].changes[0].value.messages[0].text.body;
-        const phoneNumber = data.entry[0].changes[0].value.contacts[0].wa_id;
-        const name = data.entry[0].changes[0].value.contacts[0].profile.name;
-
-
-        // const replyMessage = `Hello ${name}, Your Message Received`;
-        const replyMessage = await this.geminiSrvice.generateReply(message);
-
-        const isReplied = await this.messageService.sendMessage(phoneNumber, replyMessage);
-        
-        if(isReplied){
+        const status = data.entry[0].changes[0].value.statuses;
+        if(status!== undefined && status.length > 0){
+            console.log('status:', status[0].status);
             return true;
         }
         
+        
+        try{
+              const message = data.entry[0].changes[0].value.messages[0].text.body;
+            const phoneNumber = data.entry[0].changes[0].value.contacts[0].wa_id;
+            const name = data.entry[0].changes[0].value.contacts[0].profile.name;
+
+
+        // const replyMessage = `Hello ${name}, Your Message Received`;
+            const replyMessage = await this.geminiSrvice.generateReply(message);
+
+            const isReplied = await this.messageService.sendMessage(phoneNumber, replyMessage);
+            
+        
+            if(isReplied){
+                return true;
+            }
+        } catch(error:any){
+            console.log(error);
+            return true;
+        }
+      
         return false;
     }
 

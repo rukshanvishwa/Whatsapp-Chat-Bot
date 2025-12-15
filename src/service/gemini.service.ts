@@ -22,7 +22,7 @@ export class GeminiService {
         try{
             const response=await this.gemini.models.generateContent({
                 model:"gemini-2.5-flash",
-                contents: "Explain how AI works in a few words",
+                contents: "Explain how AI works in a few words", 
             });
             return response.text || '';
 
