@@ -43,7 +43,8 @@ export class WebhookService {
         const name = data.entry[0].changes[0].value.contacts[0].profile.name;
 
 
-        const replyMessage = `Hello ${name}, Your Message Received`;
+        // const replyMessage = `Hello ${name}, Your Message Received`;
+        const replyMessage = await this.geminiSrvice.generateReply(message);
 
         const isReplied = await this.messageService.sendMessage(phoneNumber, replyMessage);
         
