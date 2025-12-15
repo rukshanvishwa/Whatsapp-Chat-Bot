@@ -2,10 +2,12 @@ import { Request, Response } from "express";
 import { WebhookMessageDto, WebhookVerificationDto, WebhookVerificationResponseDto } from "../dto/webhookVerification.dto";
 import { APP_CONFIG } from "../config/app.config";
 import { MessageService } from "./message.service";
+import { GeminiService } from "./gemini.service";
 export class WebhookService {
 
     private static instance: WebhookService;
-    private messageService:MessageService
+    private messageService:MessageService;
+    private geminiSrvice: GeminiService;
 
     public static getInstance(): WebhookService {
         if(!WebhookService.instance){
@@ -16,6 +18,7 @@ export class WebhookService {
 
     private constructor(){
         this.messageService = MessageService.getInstance();
+        this.geminiSrvice = GeminiService.getInstance();
     }
 
     public handleWebhookVerfifcation(data: WebhookVerificationDto):WebhookVerificationResponseDto{
