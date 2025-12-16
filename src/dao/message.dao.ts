@@ -15,7 +15,7 @@ export class MessageDao {
     public async createMessage(message:IMessage):Promise<IMessage>{
         try{
             const newMessage = new Message(message);
-            return newMessage.save();
+            return await newMessage.save();
         } catch (error) {
             console.log(error);
             throw error;
@@ -24,7 +24,7 @@ export class MessageDao {
 
     public async getMessagesByUserId(userId: string):Promise <IMessage[]>{
         try{
-            return Message.find({userId: userId})
+            return await Message.find({userId: userId})
             .sort({createdAt: -1})
             .limit(5)
             .lean()
